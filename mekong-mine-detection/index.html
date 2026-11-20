@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mekong Mine Detection Pilot</title>
+<link rel="icon" href="assets/tu-emblem-64.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+.leaflet-image-layer,.leaflet-layer,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-pane,.leaflet-pane>canvas,.leaflet-pane>svg,.leaflet-tile,.leaflet-tile-container,.leaflet-zoom-box{position:absolute;left:0;top:0}.leaflet-container{overflow:hidden}.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-user-drag:none}.leaflet-tile::selection{background:0 0}.leaflet-safari .leaflet-tile{image-rendering:-webkit-optimize-contrast}.leaflet-safari .leaflet-tile-container{width:1600px;height:1600px;-webkit-transform-origin:0 0}.leaflet-marker-icon,.leaflet-marker-shadow{display:block}.leaflet-container .leaflet-overlay-pane svg{max-width:none!important;max-height:none!important}.leaflet-container .leaflet-marker-pane img,.leaflet-container .leaflet-shadow-pane img,.leaflet-container .leaflet-tile,.leaflet-container .leaflet-tile-pane img,.leaflet-container img.leaflet-image-layer{max-width:none!important;max-height:none!important;width:auto;padding:0}.leaflet-container img.leaflet-tile{mix-blend-mode:plus-lighter}.leaflet-container.leaflet-touch-zoom{-ms-touch-action:pan-x pan-y;touch-action:pan-x pan-y}.leaflet-container.leaflet-touch-drag{-ms-touch-action:pinch-zoom;touch-action:none;touch-action:pinch-zoom}.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom{-ms-touch-action:none;touch-action:none}.leaflet-container{-webkit-tap-highlight-color:transparent}.leaflet-container a{-webkit-tap-highlight-color:rgba(51,181,229,.4)}.leaflet-tile{filter:inherit;visibility:hidden}.leaflet-tile-loaded{visibility:inherit}.leaflet-zoom-box{width:0;height:0;-moz-box-sizing:border-box;box-sizing:border-box;z-index:800}.leaflet-overlay-pane svg{-moz-user-select:none}.leaflet-pane{z-index:400}.leaflet-tile-pane{z-index:200}.leaflet-overlay-pane{z-index:400}.leaflet-shadow-pane{z-index:500}.leaflet-marker-pane{z-index:600}.leaflet-tooltip-pane{z-index:650}.leaflet-popup-pane{z-index:700}.leaflet-map-pane canvas{z-index:100}.leaflet-map-pane svg{z-index:200}.leaflet-vml-shape{width:1px;height:1px}.lvml{behavior:none;display:inline-block;position:absolute}.leaflet-control{position:relative;z-index:800;pointer-events:visiblePainted;pointer-events:auto}.leaflet-bottom,.leaflet-top{position:absolute;z-index:1000;pointer-events:none}.leaflet-top{top:0}.leaflet-right{right:0}.leaflet-bottom{bottom:0}.leaflet-left{left:0}.leaflet-control{float:left;clear:both}.leaflet-right .leaflet-control{float:right}.leaflet-top .leaflet-control{margin-top:10px}.leaflet-bottom .leaflet-control{margin-bottom:10px}.leaflet-left .leaflet-control{margin-left:10px}.leaflet-right .leaflet-control{margin-right:10px}.leaflet-fade-anim .leaflet-popup{opacity:0;-webkit-transition:opacity .2s linear;-moz-transition:opacity .2s linear;transition:opacity .2s linear}.leaflet-fade-anim .leaflet-map-pane .leaflet-popup{opacity:1}.leaflet-zoom-animated{-webkit-transform-origin:0 0;-ms-transform-origin:0 0;transform-origin:0 0}svg.leaflet-zoom-animated{will-change:transform}.leaflet-zoom-anim .leaflet-zoom-animated{-webkit-transition:-webkit-transform .25s cubic-bezier(0,0,.25,1);-moz-transition:-moz-transform .25s cubic-bezier(0,0,.25,1);transition:transform .25s cubic-bezier(0,0,.25,1)}.leaflet-pan-anim .leaflet-tile,.leaflet-zoom-anim .leaflet-tile{-webkit-transition:none;-moz-transition:none;transition:none}.leaflet-zoom-anim .leaflet-zoom-hide{visibility:hidden}.leaflet-interactive{cursor:pointer}.leaflet-grab{cursor:-webkit-grab;cursor:-moz-grab;cursor:grab}.leaflet-crosshair,.leaflet-crosshair .leaflet-interactive{cursor:crosshair}.leaflet-control,.leaflet-popup-pane{cursor:auto}.leaflet-dragging .leaflet-grab,.leaflet-dragging .leaflet-grab .leaflet-interactive,.leaflet-dragging .leaflet-marker-draggable{cursor:move;cursor:-webkit-grabbing;cursor:-moz-grabbing;cursor:grabbing}.leaflet-image-layer,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-pane>svg path,.leaflet-tile-container{pointer-events:none}.leaflet-image-layer.leaflet-interactive,.leaflet-marker-icon.leaflet-interactive,.leaflet-pane>svg path.leaflet-interactive,svg.leaflet-image-layer.leaflet-interactive path{pointer-events:visiblePainted;pointer-events:auto}.leaflet-container{background:#ddd;outline-offset:1px}.leaflet-container a{color:#0078a8}.leaflet-zoom-box{border:2px dotted #38f;background:rgba(255,255,255,.5)}.leaflet-container{font-family:"Helvetica Neue",Arial,Helvetica,sans-serif;font-size:12px;font-size:.75rem;line-height:1.5}.leaflet-bar{box-shadow:0 1px 5px rgba(0,0,0,.65);border-radius:4px}.leaflet-bar a{background-color:#fff;border-bottom:1px solid #ccc;width:26px;height:26px;line-height:26px;display:block;text-align:center;text-decoration:none;color:#000}.leaflet-bar a,.leaflet-control-layers-toggle{background-position:50% 50%;background-repeat:no-repeat;display:block}.leaflet-bar a:focus,.leaflet-bar a:hover{background-color:#f4f4f4}.leaflet-bar a:first-child{border-top-left-radius:4px;border-top-right-radius:4px}.leaflet-bar a:last-child{border-bottom-left-radius:4px;border-bottom-right-radius:4px;border-bottom:none}.leaflet-bar a.leaflet-disabled{cursor:default;background-color:#f4f4f4;color:#bbb}.leaflet-touch .leaflet-bar a{width:30px;height:30px;line-height:30px}.leaflet-touch .leaflet-bar a:first-child{border-top-left-radius:2px;border-top-right-radius:2px}.leaflet-touch .leaflet-bar a:last-child{border-bottom-left-radius:2px;border-bottom-right-radius:2px}.leaflet-control-zoom-in,.leaflet-control-zoom-out{font:bold 18px 'Lucida Console',Monaco,monospace;text-indent:1px}.leaflet-touch .leaflet-control-zoom-in,.leaflet-touch .leaflet-control-zoom-out{font-size:22px}.leaflet-control-layers{box-shadow:0 1px 5px rgba(0,0,0,.4);background:#fff;border-radius:5px}.leaflet-control-layers-toggle{background-image:none;width:36px;height:36px}.leaflet-retina .leaflet-control-layers-toggle{background-image:none;background-size:26px 26px}.leaflet-touch .leaflet-control-layers-toggle{width:44px;height:44px}.leaflet-control-layers .leaflet-control-layers-list,.leaflet-control-layers-expanded .leaflet-control-layers-toggle{display:none}.leaflet-control-layers-expanded .leaflet-control-layers-list{display:block;position:relative}.leaflet-control-layers-expanded{padding:6px 10px 6px 6px;color:#333;background:#fff}.leaflet-control-layers-scrollbar{overflow-y:scroll;overflow-x:hidden;padding-right:5px}.leaflet-control-layers-selector{margin-top:2px;position:relative;top:1px}.leaflet-control-layers label{display:block;font-size:13px;font-size:1.08333em}.leaflet-control-layers-separator{height:0;border-top:1px solid #ddd;margin:5px -10px 5px -6px}.leaflet-default-icon-path{background-image:none}.leaflet-container .leaflet-control-attribution{background:#fff;background:rgba(255,255,255,.8);margin:0}.leaflet-control-attribution,.leaflet-control-scale-line{padding:0 5px;color:#333;line-height:1.4}.leaflet-control-attribution a{text-decoration:none}.leaflet-control-attribution a:focus,.leaflet-control-attribution a:hover{text-decoration:underline}.leaflet-attribution-flag{display:inline!important;vertical-align:baseline!important;width:1em;height:.6669em}.leaflet-left .leaflet-control-scale{margin-left:5px}.leaflet-bottom .leaflet-control-scale{margin-bottom:5px}.leaflet-control-scale-line{border:2px solid #777;border-top:none;line-height:1.1;padding:2px 5px 1px;white-space:nowrap;-moz-box-sizing:border-box;box-sizing:border-box;background:rgba(255,255,255,.8);text-shadow:1px 1px #fff}.leaflet-control-scale-line:not(:first-child){border-top:2px solid #777;border-bottom:none;margin-top:-2px}.leaflet-control-scale-line:not(:first-child):not(:last-child){border-bottom:2px solid #777}.leaflet-touch .leaflet-bar,.leaflet-touch .leaflet-control-attribution,.leaflet-touch .leaflet-control-layers{box-shadow:none}.leaflet-touch .leaflet-bar,.leaflet-touch .leaflet-control-layers{border:2px solid rgba(0,0,0,.2);background-clip:padding-box}.leaflet-popup{position:absolute;text-align:center;margin-bottom:20px}.leaflet-popup-content-wrapper{padding:1px;text-align:left;border-radius:12px}.leaflet-popup-content{margin:13px 24px 13px 20px;line-height:1.3;font-size:13px;font-size:1.08333em;min-height:1px}.leaflet-popup-content p{margin:17px 0;margin:1.3em 0}.leaflet-popup-tip-container{width:40px;height:20px;position:absolute;left:50%;margin-top:-1px;margin-left:-20px;overflow:hidden;pointer-events:none}.leaflet-popup-tip{width:17px;height:17px;padding:1px;margin:-10px auto 0;pointer-events:auto;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-ms-transform:rotate(45deg);transform:rotate(45deg)}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#fff;color:#333;box-shadow:0 3px 14px rgba(0,0,0,.4)}.leaflet-container a.leaflet-popup-close-button{position:absolute;top:0;right:0;border:none;text-align:center;width:24px;height:24px;font:16px/24px Tahoma,Verdana,sans-serif;color:#757575;text-decoration:none;background:0 0}.leaflet-container a.leaflet-popup-close-button:focus,.leaflet-container a.leaflet-popup-close-button:hover{color:#585858}.leaflet-popup-scrolled{overflow:auto}.leaflet-oldie .leaflet-popup-content-wrapper{-ms-zoom:1}.leaflet-oldie .leaflet-popup-tip{width:24px;margin:0 auto}.leaflet-oldie .leaflet-control-layers,.leaflet-oldie .leaflet-control-zoom,.leaflet-oldie .leaflet-popup-content-wrapper,.leaflet-oldie .leaflet-popup-tip{border:1px solid #999}.leaflet-div-icon{background:#fff;border:1px solid #666}.leaflet-tooltip{position:absolute;padding:6px;background-color:#fff;border:1px solid #fff;border-radius:3px;color:#222;white-space:nowrap;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,.4)}.leaflet-tooltip.leaflet-interactive{cursor:pointer;pointer-events:auto}.leaflet-tooltip-bottom:before,.leaflet-tooltip-left:before,.leaflet-tooltip-right:before,.leaflet-tooltip-top:before{position:absolute;pointer-events:none;border:6px solid transparent;background:0 0;content:""}.leaflet-tooltip-bottom{margin-top:6px}.leaflet-tooltip-top{margin-top:-6px}.leaflet-tooltip-bottom:before,.leaflet-tooltip-top:before{left:50%;margin-left:-6px}.leaflet-tooltip-top:before{bottom:0;margin-bottom:-12px;border-top-color:#fff}.leaflet-tooltip-bottom:before{top:0;margin-top:-12px;margin-left:-6px;border-bottom-color:#fff}.leaflet-tooltip-left{margin-left:-6px}.leaflet-tooltip-right{margin-left:6px}.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{top:50%;margin-top:-6px}.leaflet-tooltip-left:before{right:0;margin-right:-12px;border-left-color:#fff}.leaflet-tooltip-right:before{left:0;margin-left:-12px;border-right-color:#fff}@media print{.leaflet-control{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+:root{
+  /* layout: one-screen tool; filter rail left, map center, evidence rail right */
+  --bg:#eef0ec; --panel:#fbfbf8; --ink:#1c2a2e; --muted:#5d6b6e; --line:#d5dad3;
+  --accent:#0f6e78; --water:#7fb2c4; --land:#e2e5dc; --land-focus:#f3f1e6;
+  --alluvial:#d9912b; --heap:#c8442f; --isl:#6a4bb5; --unk:#7c8587;
+  --matched:#c2187a; --cand:#e0b100; --check:#6f7a7d; --newonly:#1f8fd6;
+  --font:"IBM Plex Sans Thai","Noto Sans Thai",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#12191b; --panel:#1a2325; --ink:#e4ebe9; --muted:#9aa8a8; --line:#2d3a3c;
+  --accent:#5cc3cc; --water:#3f7f95; --land:#1f2a2b; --land-focus:#2a3432;
+  --alluvial:#f0b04f; --heap:#ef6b54; --isl:#a58bf0; --unk:#8f9a9c;
+  --matched:#ff5fb4; --cand:#ffd23f; --check:#93a0a2; --newonly:#5db8f5; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#12191b; --panel:#1a2325; --ink:#e4ebe9; --muted:#9aa8a8; --line:#2d3a3c;
+  --accent:#5cc3cc; --water:#3f7f95; --land:#1f2a2b; --land-focus:#2a3432;
+  --alluvial:#f0b04f; --heap:#ef6b54; --isl:#a58bf0; --unk:#8f9a9c;
+  --matched:#ff5fb4; --cand:#ffd23f; --check:#93a0a2; --newonly:#5db8f5; color-scheme:dark; }
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.5;display:flex;flex-direction:column}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 20px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel)}
+header{align-items:center}header h1{font-size:18px;font-weight:600;margin:0;line-height:1.25}.logo{flex:none;width:44px;height:44px}.brand{display:flex;flex-direction:column}.brand span{font-size:12px;color:var(--muted)}
+header p{margin:0;color:var(--muted);font-size:13px;flex:1 1 320px}
+nav{display:flex;gap:4px}
+nav a{padding:5px 12px;border:1px solid var(--line);border-radius:4px;color:var(--ink);text-decoration:none;font-weight:500;font-size:13px}
+nav a[aria-current="page"]{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,tr:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main{flex:1;min-height:0}
+#view-map{display:grid;grid-template-columns:270px minmax(0,1fr) 380px;height:100%}
+.rail{overflow-y:auto;padding:14px 16px;background:var(--panel);display:flex;flex-direction:column;gap:16px}
+.rail.left{border-right:1px solid var(--line)} .rail.right{border-left:1px solid var(--line)}
+h2{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:3px}
+select{width:100%;padding:6px 8px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font:inherit}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.field{display:flex;flex-direction:column;gap:10px}
+.chk{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink);margin:0 0 5px;cursor:pointer}
+.chk input{accent-color:var(--accent);margin:0}
+.sw{width:12px;height:12px;border-radius:50%;flex:none;border:1px solid rgba(0,0,0,.35)}
+.sw.sq{border-radius:2px}
+.n{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--muted)}
+button.link{background:none;border:0;color:var(--accent);font:inherit;padding:0;cursor:pointer;text-decoration:underline;text-align:left}
+#mapwrap{position:relative;min-height:320px}
+#map{position:absolute;inset:0;background:var(--bg)}
+.leaflet-container{font-family:var(--font);background:var(--bg)}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--panel);color:var(--ink)}
+.leaflet-popup-content{margin:10px 12px;font-size:13px;line-height:1.45}
+.leaflet-popup-content b{font-weight:600}
+.pp dt{color:var(--muted);font-size:11px;margin-top:5px}.pp dd{margin:0}
+.pp dl{margin:4px 0 0}
+.clabel{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap;pointer-events:none;text-shadow:0 0 3px var(--bg)}
+.rlabel{font-size:11px;font-style:italic;color:var(--water);white-space:nowrap;pointer-events:none;text-shadow:0 0 3px var(--bg),0 0 3px var(--bg)}
+#hint{position:absolute;left:58px;top:10px;z-index:500;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:5px 9px;font-size:12px;color:var(--muted);max-width:70%}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kpi{border:1px solid var(--line);border-radius:4px;padding:8px 10px;background:var(--bg)}
+.kpi b{display:block;font-family:var(--mono);font-size:20px;font-weight:500;font-variant-numeric:tabular-nums;line-height:1.2}
+.kpi span{font-size:11.5px;color:var(--muted);display:block;line-height:1.35}
+.chartbox{position:relative;height:170px}
+.note{font-size:12px;color:var(--muted);margin:6px 0 0}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{padding:5px 6px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+th{font-weight:500;color:var(--muted);font-size:11.5px;vertical-align:bottom}
+td.num{font-family:var(--mono);font-size:12px}
+#sbtable tbody tr{cursor:pointer} #sbtable tbody tr:hover{background:var(--bg)}
+#sbtable tr.on{background:var(--bg);box-shadow:inset 3px 0 0 var(--accent)}
+#view-model{height:100%;overflow-y:auto;padding:22px 16px 48px}
+.doc{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+.doc h3{font-size:17px;font-weight:600;margin:0 0 6px;text-wrap:balance}
+.doc p{margin:0 0 8px;max-width:68ch}
+.doc ul{margin:0;padding-left:20px;max-width:68ch}.doc li{margin-bottom:5px}
+.doc table{font-size:13px;max-width:760px}
+.doc section{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px 18px}
+.bar{display:inline-block;height:8px;background:var(--accent);border-radius:1px;vertical-align:middle;margin-right:6px}
+.pill{display:inline-block;padding:1px 7px;border-radius:9px;font-size:11.5px;border:1px solid var(--line);color:var(--muted)}
+[hidden]{display:none!important}
+@media (max-width:1100px){ #view-map{grid-template-columns:240px minmax(0,1fr)} .rail.right{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)} #view-map{height:auto} #mapwrap{height:62vh} main{overflow-y:auto} }
+@media (max-width:640px){ #view-map{grid-template-columns:minmax(0,1fr)} .rail.left{border-right:0;border-bottom:1px solid var(--line)} #mapwrap{height:70vh} }
+</style>
+</head>
+<body>
+<header>
+  <img class="logo" src="assets/tu-emblem.png" alt="ตรามหาวิทยาลัยธรรมศาสตร์" width="44" height="44">
+  <div class="brand"><h1>Mekong Mine Detection Pilot</h1><span>ผศ.ดร.สิทธิศักดิ์ หมูคำหล้า · ภาควิชาภูมิศาสตร์ คณะศิลปศาสตร์ มหาวิทยาลัยธรรมศาสตร์</span></div>
+  <p>จุดเหมืองริมน้ำของ Stimson Center เทียบกับขอบเขตเหมืองที่ model ทำนายจาก AlphaEarth embedding ปี 2025 ผลทำนายยังไม่ผ่านการตรวจภาคสนาม</p>
+  <nav aria-label="หน้า">
+    <a href="#map" id="tab-map">แผนที่</a>
+    <a href="#model" id="tab-model">Model และข้อจำกัด</a>
+  </nav>
+</header>
+<main>
+<div id="view-map">
+  <aside class="rail left" aria-label="ตัวกรอง">
+    <div class="field">
+      <h2>ตัวกรอง</h2>
+      <div><label for="f-country">ประเทศ</label><select id="f-country"></select></div>
+      <div><label for="f-basin">ลุ่มน้ำหลัก</label><select id="f-basin"></select></div>
+      <div><label for="f-sb">ลุ่มน้ำย่อย</label><select id="f-sb"></select></div>
+      <div class="row2">
+        <div><label for="f-y0">ปีที่เริ่ม ตั้งแต่</label><select id="f-y0"></select></div>
+        <div><label for="f-y1">ถึง</label><select id="f-y1"></select></div>
+      </div>
+      <button class="link" id="reset" type="button">ล้างตัวกรอง</button>
+    </div>
+    <div>
+      <h2>วิธีทำเหมือง</h2>
+      <div id="meths"></div>
+    </div>
+    <div>
+      <h2>แผนที่ฐาน</h2>
+      <label for="f-base" style="position:absolute;left:-9999px">แผนที่ฐาน</label>
+      <select id="f-base"><option value="osm">OpenStreetMap</option><option value="sat">ภาพดาวเทียม (Esri World Imagery)</option><option value="none">ลายเส้น ไม่ใช้อินเทอร์เน็ต</option></select>
+    </div>
+    <div>
+      <h2>ชั้นข้อมูล</h2>
+      <label class="chk"><input type="checkbox" id="l-mines" checked><span class="sw" style="background:var(--ink)"></span>จุดเหมือง Stimson</label>
+      <label class="chk"><input type="checkbox" id="l-s0" checked><span class="sw sq" style="background:var(--matched)"></span>ทำนาย: ตรงกับจุด Stimson<span class="n" id="n-s0"></span></label>
+      <label class="chk"><input type="checkbox" id="l-s1" checked><span class="sw sq" style="background:var(--cand)"></span>ทำนาย: ไม่มีจุด Stimson ปี 2021 ยังเป็นพืชพรรณ<span class="n" id="n-s1"></span></label>
+      <label class="chk"><input type="checkbox" id="l-s2" checked><span class="sw sq" style="background:var(--check)"></span>ทำนาย: ไม่มีจุด Stimson ปี 2021 เป็นดินโล่ง ไร่ ชุมชน หรือน้ำ<span class="n" id="n-s2"></span></label>
+      <label class="chk"><input type="checkbox" id="l-s3" checked><span class="sw sq" style="background:var(--newonly)"></span>ทำนาย: ไม่มีจุด Stimson และเห็นเฉพาะปี 2025<span class="n" id="n-s3"></span></label>
+      <label class="chk"><input type="checkbox" id="l-blocks" checked><span class="sw sq" style="background:transparent;border:1.5px dashed var(--muted)"></span>พื้นที่ที่รัน model (block 10 กม.)</label>
+      <label class="chk"><input type="checkbox" id="l-img" checked><span class="sw sq" style="background:linear-gradient(135deg,#42603d,#b9a27a)"></span>ภาพ Sentinel-2 ต้นปี 2025 เมื่อซูมเข้า</label>
+      <label class="chk"><input type="checkbox" id="l-fill"><span class="sw sq" style="background:var(--matched);opacity:.5"></span>เติมสีขอบเขตที่ทำนาย</label>
+    </div>
+    <p class="note">ภาพ Esri World Imagery มีวันถ่ายไม่แน่นอน อาจเก่ากว่าปี 2025 หลายปี ใช้ภาพ Sentinel-2 ต้นปี 2025 ในกรอบเส้นประเมื่อต้องการเทียบกับผลทำนาย</p>
+  </aside>
+  <div id="mapwrap"><div id="map" role="application" aria-label="แผนที่เหมือง"></div><div id="hint"></div></div>
+  <aside class="rail right" aria-label="สรุป">
+    <div>
+      <h2>สรุปตามตัวกรอง</h2>
+      <div class="kpis">
+        <div class="kpi"><b id="k-mines">–</b><span>จุดเหมือง Stimson</span></div>
+        <div class="kpi"><b id="k-ha">–</b><span>เฮกตาร์ที่ทำนายว่าเป็นเหมือง ปี <span class="lasty"></span></span></div>
+        <div class="kpi"><b id="k-det">–</b><span>จุด Stimson ในพื้นที่ที่รัน ซึ่งมีขอบเขตทำนายภายใน 100 ม.</span></div>
+        <div class="kpi"><b id="k-un">–</b><span>เฮกตาร์ที่ทำนายแต่ไม่มีจุด Stimson ใน 500 ม.</span></div>
+      </div>
+    </div>
+    <div>
+      <h2>จุดเหมือง Stimson ตามปีที่เริ่ม</h2>
+      <div class="chartbox"><canvas id="c-year" aria-label="จำนวนจุดเหมืองตามปีที่เริ่มและวิธีทำเหมือง"></canvas></div>
+    </div>
+    <div>
+      <h2>พื้นที่ที่ทำนายว่าเป็นเหมือง ปี 2025 (เฮกตาร์)</h2>
+      <div class="chartbox" style="height:130px"><canvas id="c-area" aria-label="พื้นที่ที่ทำนายว่าเป็นเหมืองปี 2025 แยกตามสถานะ"></canvas></div>
+      <p class="note">เฉพาะ <span id="nblk"></span> block ในลุ่มน้ำโขงที่มีจุด Stimson นับทุก patch ตั้งแต่ 0.5 เฮกตาร์ กลุ่มที่ไม่มีจุด Stimson ยังไม่ได้คัด false alarm ออก</p>
+    </div>
+    <div>
+      <h2>ลุ่มน้ำย่อยในพื้นที่ที่รัน</h2>
+      <div class="tablewrap"><table id="sbtable"><thead><tr><th>ลุ่มน้ำย่อย</th><th>จุด Stimson</th><th>เฮกตาร์ที่ทำนาย</th><th>ตรงกับ Stimson</th><th>ไม่มีจุด Stimson</th></tr></thead><tbody></tbody></table></div>
+      <p class="note">กดแถวเพื่อกรองและซูมไปที่ลุ่มน้ำนั้น</p>
+    </div>
+  </aside>
+</div>
+<div id="view-model" hidden>
+  <div class="doc" id="doc"></div>
+</div>
+</main>
+<script src="vendor/leaflet.min.js"></script>
+<script src="vendor/chart.umd.min.js"></script>
+<script>
+(async function(){
+const $=s=>document.querySelector(s), css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const fmt=n=>Math.round(n).toLocaleString('en-US'), pct=x=>(100*x).toFixed(0)+'%';
+let APP,PATCH;
+try{ [APP,PATCH]=await Promise.all([fetch('data/app.json').then(r=>r.json()),fetch('data/patches.json').then(r=>r.json())]); }
+catch(e){ $('#hint').textContent='โหลดข้อมูลไม่สำเร็จ ลองเปิดหน้านี้ใหม่'; return; }
+const YRS=APP.years, Y0=YRS[0], Y1=YRS[YRS.length-1];
+document.querySelectorAll('.lasty').forEach(e=>e.textContent=Y1); $('#nblk').textContent=APP.blocks.length;
+const MCOL=['--alluvial','--heap','--isl','--unk'], MTH=['Alluvial (ร่อนแร่ตามลำน้ำ)','Heap leach (กองแร่ชะด้วยสารเคมี)','In-situ leaching (rare earth)','ไม่ระบุ'];
+const SCOL=['--matched','--cand','--check','--newonly'];
+const WC={10:'ป่า/ไม้ยืนต้น',20:'ไม้พุ่ม',30:'ทุ่งหญ้า',40:'พื้นที่เพาะปลูก',50:'สิ่งปลูกสร้าง',60:'ดินโล่ง',80:'น้ำ',90:'พื้นที่ชุ่มน้ำ'};
+const S={c:-1,b:-1,sb:-1,y0:2015,y1:2026,m:[true,true,true,true]};
+
+/* ---- controls ---- */
+const opt=(el,items,all)=>{el.innerHTML='<option value="-1">'+all+'</option>'+items.map(([v,t])=>`<option value="${v}">${t}</option>`).join('')};
+opt($('#f-country'),APP.countries.map((c,i)=>[i,c]),'ทุกประเทศ');
+opt($('#f-basin'),APP.basins.map((c,i)=>[i,c]),'ทุกลุ่มน้ำ');
+function sbOptions(){ const ok=new Set(); APP.mines.forEach(r=>{ if((S.c<0||r[4]==S.c)&&(S.b<0||r[6]==S.b)) ok.add(r[5]); });
+  opt($('#f-sb'),APP.subbasins.map((c,i)=>[i,c]).filter(([i])=>ok.has(i)),'ทุกลุ่มน้ำย่อย'); if(!ok.has(S.sb)) S.sb=-1; $('#f-sb').value=S.sb; }
+const yl=y=>y==2015?'≤2015':y;
+$('#f-y0').innerHTML=$('#f-y1').innerHTML=Array.from({length:12},(_,i)=>2015+i).map(y=>`<option value="${y}">${yl(y)}</option>`).join(''); $('#f-y1').value=2026;
+$('#meths').innerHTML=MTH.map((t,i)=>`<label class="chk"><input type="checkbox" id="m-${i}" checked><span class="sw" style="background:var(${MCOL[i]})"></span>${t}<span class="n" id="nm-${i}"></span></label>`).join('');
+
+/* ---- map ---- */
+const map=L.map('map',{preferCanvas:true,zoomSnap:.5,minZoom:4,maxZoom:17,attributionControl:true,maxBounds:[[5,86],[32,116]]});
+map.attributionControl.setPrefix(false).addAttribution('Mines: Stimson Center · Embeddings: Google/DeepMind AlphaEarth · Imagery: Copernicus Sentinel-2 · Rivers: HydroSHEDS · Natural Earth');
+['land','base','img','riv','blk','patch','mine'].forEach((p,i)=>{map.createPane(p).style.zIndex=300+i*10});
+const cv=p=>L.canvas({pane:p,padding:.3});
+const FOC=new Set(['Myanmar','Laos','Cambodia']);
+const landL=L.geoJSON(APP.cty,{pane:'land',renderer:cv('land'),interactive:false,style:f=>({color:css('--line'),weight:1,fillColor:FOC.has(f.properties.NAME)?css('--land-focus'):css('--land'),fillOpacity:1})}).addTo(map);
+const labL=L.layerGroup().addTo(map);
+[['Myanmar',21.3,96.2],['Laos',19.6,102.6],['Cambodia',12.9,105.2],['Thailand',16.2,101.2],['Vietnam',21.6,105.3],['China',25.6,101.5]].forEach(([n,la,lo])=>L.marker([la,lo],{pane:'riv',interactive:false,icon:L.divIcon({className:'clabel',html:n,iconSize:[0,0]})}).addTo(labL));
+const rivL=L.layerGroup().addTo(map), rr=cv('riv');
+APP.rivers.forEach(r=>L.polyline(r.c.map(p=>[p[1],p[0]]),{pane:'riv',renderer:rr,interactive:false,color:css('--water'),weight:r.m?2.4:1.1,opacity:r.m?1:.85}).addTo(rivL));
+[['Mekong',17.9,104.3],['Salween',19.3,97.5],['Irrawaddy',22.6,95.6]].forEach(([n,la,lo])=>L.marker([la,lo],{pane:'riv',interactive:false,icon:L.divIcon({className:'rlabel',html:n,iconSize:[0,0]})}).addTo(map));
+const blkL=L.layerGroup().addTo(map), br=cv('blk');
+APP.blocks.forEach((b,i)=>{const [w,s,e,n]=b.bounds; L.rectangle([[s,w],[n,e]],{pane:'blk',renderer:br,interactive:false,color:css('--muted'),weight:1,dashArray:'4 4',fill:false}).addTo(blkL)});
+const BASE={osm:L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{pane:'base',maxZoom:17,maxNativeZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}),
+  sat:L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{pane:'base',maxZoom:17,attribution:'Basemap imagery: Esri, Maxar, Earthstar Geographics'})};
+function setBase(k){ Object.values(BASE).forEach(l=>map.removeLayer(l)); if(BASE[k]){ BASE[k].addTo(map); map.removeLayer(labL); } else labL.addTo(map); }
+let patchL=null, mineL=L.layerGroup().addTo(map); const pr=cv('patch'), mr=cv('mine'); const imgs=new Map();
+
+const mineOK=r=>(S.c<0||r[4]==S.c)&&(S.b<0||r[6]==S.b)&&(S.sb<0||r[5]==S.sb)&&r[3]>=S.y0&&r[3]<=S.y1&&S.m[r[2]];
+const blockOK=i=>{const b=APP.blocks[i]; return (S.c<0||b.c==S.c)&&(S.sb<0||b.sb==S.sb)&&(S.b<0||APP.basins[S.b]=='Mekong');};
+const patchOK=p=>{ if(!blockOK(p.bi)) return false; const t=p.t?p.t-1:3; return S.m[t]; };
+const lay={s:[true,true,true,true]};
+function minePopup(r){const d=r[7]; return `<div class="pp"><b>${APP.meth[r[2]]}</b>${r[8]?' · '+r[8]:''}${r[10]?' <span class="pill">Inactive</span>':''}<dl>
+<dt>ปีที่เริ่ม (Stimson)</dt><dd>${yl(r[3])}</dd><dt>ที่ตั้ง</dt><dd>${[r[9],APP.countries[r[4]]].filter(Boolean).join(', ')}</dd>
+<dt>ลุ่มน้ำ</dt><dd>${APP.subbasins[r[5]]} · ${APP.basins[r[6]]}</dd><dt>แหล่งข้อมูล</dt><dd>${r[11].startsWith('http')?'<a href="'+r[11]+'">Shan Human Rights Foundation</a>':r[11]}</dd>
+<dt>Model ปี ${Y1}</dt><dd>${d<0?'อยู่นอกพื้นที่ที่รัน model':d?'มีขอบเขตทำนายภายใน 100 ม.':'ไม่มีขอบเขตทำนายภายใน 100 ม.'}</dd></dl></div>`;}
+function patchPopup(p){const st=['ตรงกับจุด Stimson (ภายใน 500 ม.)','ไม่มีจุด Stimson ใกล้เคียง และปี 2021 ส่วนใหญ่ยังเป็นพืชพรรณ','ไม่มีจุด Stimson ใกล้เคียง และปี 2021 เป็นดินโล่ง ไร่ ชุมชน หรือน้ำอยู่แล้ว เสี่ยงทายผิด','ไม่มีจุด Stimson ใกล้เคียง และ model ไม่เห็นในปี 2024 อาจเป็นพื้นที่เปิดใหม่หรือดินโล่งชั่วคราว'][p.s];
+ return `<div class="pp"><b>ขอบเขตที่ model ทำนาย</b> · ${p.a.toLocaleString()} เฮกตาร์<dl>
+<dt>สถานะ</dt><dd>${st}</dd><dt>ปีแรกที่ model เห็นต่อเนื่องถึง 2025 (หยาบ)</dt><dd>${p.fy?(p.fy==Y0?'≤'+Y0:p.fy):'–'}</dd>
+<dt>ประเภทที่ทำนาย</dt><dd>${p.t?APP.meth[p.t-1]:'–'}</dd><dt>สิ่งปกคลุมดินปี 2021 (ESA WorldCover)</dt><dd>${WC[p.wc]||'–'}</dd>
+<dt>ค่า probability เฉลี่ย</dt><dd>${p.p}</dd><dt>จุด Stimson ที่ใกล้ที่สุด</dt><dd>${p.md==null?'ไม่มีใน block นี้':p.md.toLocaleString()+' ม.'}</dd>
+<dt>พิกัด</dt><dd>${p.y}, ${p.x}</dd></dl></div>`;}
+
+function drawMines(){ mineL.clearLayers(); if(!$('#l-mines').checked) return; const z=map.getZoom(), rad=z<7?2.2:z<10?3.2:4;
+  APP.mines.forEach(r=>{ if(!mineOK(r)) return; L.circleMarker([r[1],r[0]],{pane:'mine',renderer:mr,radius:rad,color:'#111',weight:.6,fillColor:css(MCOL[r[2]]),fillOpacity:.92}).bindPopup(()=>minePopup(r)).addTo(mineL); }); }
+function drawPatches(){ if(patchL) map.removeLayer(patchL); const fill=$('#l-fill').checked;
+  patchL=L.geoJSON(PATCH,{pane:'patch',renderer:pr,filter:f=>lay.s[f.properties.s]&&patchOK(f.properties),
+    style:f=>({color:css(SCOL[f.properties.s]),weight:1.6,fillColor:css(SCOL[f.properties.s]),fillOpacity:fill?.45:0.04}),
+    onEachFeature:(f,l)=>l.bindPopup(()=>patchPopup(f.properties))}).addTo(map); }
+function drawImgs(){ const on=$('#l-img').checked&&map.getZoom()>=10.5, vb=map.getBounds().pad(.1);
+  APP.blocks.forEach((b,i)=>{const [w,s,e,n]=b.bounds, bb=L.latLngBounds([[s,w],[n,e]]), need=on&&vb.intersects(bb);
+    if(need&&!imgs.has(i)) imgs.set(i,L.imageOverlay('img/b'+i+'.jpg',bb,{pane:'img',interactive:false}).addTo(map));
+    if(!need&&imgs.has(i)){ map.removeLayer(imgs.get(i)); imgs.delete(i); } });
+  const z=map.getZoom(); $('#hint').textContent=z<10.5?'ซูมเข้าไปที่กรอบเส้นประเพื่อดูขอบเขตที่ทำนายบนภาพ Sentinel-2':'ภาพ Sentinel-2 ช่วง ม.ค.–มี.ค. 2025 กดที่จุดหรือขอบเขตเพื่อดูรายละเอียด'; }
+
+/* ---- charts ---- */
+Chart.defaults.font.family=css('--font'); Chart.defaults.font.size=11; Chart.defaults.color=css('--muted'); Chart.defaults.borderColor=css('--line');
+const yearLabels=Array.from({length:12},(_,i)=>yl(2015+i));
+const cYear=new Chart($('#c-year'),{type:'bar',data:{labels:yearLabels,datasets:[0,1,2].map(i=>({label:APP.meth[i],data:[],backgroundColor:css(MCOL[i]),borderWidth:0}))},
+  options:{maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{mode:'index'}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,ticks:{precision:0}}}}});
+const SLAB=['ตรงกับ Stimson','ไม่มีจุด, เคยเป็นพืชพรรณ','ไม่มีจุด, ดินโล่ง/ไร่/ชุมชน/น้ำ','ไม่มีจุด, เห็นเฉพาะ 2025'];
+const cArea=new Chart($('#c-area'),{type:'bar',data:{labels:SLAB,datasets:[{data:[],backgroundColor:SCOL.map(css),borderWidth:0}]},
+  options:{indexAxis:'y',maintainAspectRatio:false,animation:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true},y:{grid:{display:false}}}}});
+
+/* ---- summaries ---- */
+const sbStats=(()=>{ const m={}; APP.blocks.forEach((b,i)=>{ if(b.sb<0) return; (m[b.sb]=m[b.sb]||{sb:b.sb,blocks:[],a1:0,ma:0,un:0,mines:0}).blocks.push(i); });
+  PATCH.features.forEach(f=>{const p=f.properties,b=APP.blocks[p.bi]; if(b.sb<0) return; m[b.sb].a1+=p.a; if(p.s>0) m[b.sb].un+=p.a; else m[b.sb].ma+=p.a;});
+  APP.mines.forEach(r=>{ if(r[7]>=0&&m[r[5]]) m[r[5]].mines++; });
+  return Object.values(m).sort((a,b)=>b.a1-a.a1); })();
+function drawTable(){ $('#sbtable tbody').innerHTML=sbStats.filter(s=>S.c<0||s.blocks.some(i=>APP.blocks[i].c==S.c)).map(s=>`<tr tabindex="0" data-sb="${s.sb}" class="${s.sb==S.sb?'on':''}"><td>${APP.subbasins[s.sb]}</td><td class="num">${s.mines}</td><td class="num">${fmt(s.a1)}</td><td class="num">${fmt(s.ma)}</td><td class="num">${fmt(s.un)}</td></tr>`).join(''); }
+function summarize(){
+  const ms=APP.mines.filter(mineOK); $('#k-mines').textContent=fmt(ms.length);
+  const inb=ms.filter(r=>r[7]>=0&&r[3]<=Y1), det=inb.filter(r=>r[7]==1).length;
+  $('#k-det').textContent=inb.length?`${det}/${inb.length}`:'–';
+  const ps=PATCH.features.map(f=>f.properties).filter(patchOK); let ha=0,un=0; const ns=[0,0,0,0], hs=[0,0,0,0];
+  ps.forEach(p=>{ns[p.s]++; if(lay.s[p.s]){ha+=p.a; hs[p.s]+=p.a; if(p.s>0) un+=p.a;}});
+  $('#k-ha').textContent=fmt(ha); $('#k-un').textContent=fmt(un); ns.forEach((n,i)=>$('#n-s'+i).textContent=fmt(n));
+  const cnt=[0,0,0,0]; APP.mines.forEach(r=>{ if((S.c<0||r[4]==S.c)&&(S.b<0||r[6]==S.b)&&(S.sb<0||r[5]==S.sb)&&r[3]>=S.y0&&r[3]<=S.y1) cnt[r[2]]++; }); cnt.forEach((n,i)=>$('#nm-'+i).textContent=fmt(n));
+  cYear.data.datasets.forEach((d,i)=>{ d.data=yearLabels.map((_,k)=>ms.filter(r=>r[2]==i&&r[3]==2015+k).length); }); cYear.update();
+  cArea.data.datasets[0].data=hs.map(Math.round); cArea.update();
+  drawTable();
+}
+function refresh(fit){ drawMines(); drawPatches(); summarize();
+  if(fit){ const ms=APP.mines.filter(mineOK); if(ms.length) map.fitBounds(L.latLngBounds(ms.map(r=>[r[1],r[0]])).pad(.15),{maxZoom:12}); } }
+
+/* ---- events ---- */
+$('#f-country').onchange=e=>{S.c=+e.target.value; sbOptions(); refresh(true)};
+$('#f-basin').onchange=e=>{S.b=+e.target.value; sbOptions(); refresh(true)};
+$('#f-sb').onchange=e=>{S.sb=+e.target.value; refresh(true)};
+$('#f-y0').onchange=e=>{S.y0=+e.target.value; if(S.y1<S.y0){S.y1=S.y0;$('#f-y1').value=S.y1} refresh()};
+$('#f-y1').onchange=e=>{S.y1=+e.target.value; if(S.y0>S.y1){S.y0=S.y1;$('#f-y0').value=S.y0} refresh()};
+[0,1,2,3].forEach(i=>$('#m-'+i).onchange=e=>{S.m[i]=e.target.checked; refresh()});
+[0,1,2,3].forEach(i=>$('#l-s'+i).onchange=e=>{lay.s[i]=e.target.checked; drawPatches(); summarize()});
+$('#f-base').onchange=e=>setBase(e.target.value); setBase('osm');
+$('#l-mines').onchange=drawMines; $('#l-fill').onchange=drawPatches; $('#l-img').onchange=drawImgs;
+$('#l-blocks').onchange=e=>e.target.checked?blkL.addTo(map):map.removeLayer(blkL);
+$('#reset').onclick=()=>{Object.assign(S,{c:-1,b:-1,sb:-1,y0:2015,y1:2026,m:[true,true,true,true]}); ['#f-country','#f-basin'].forEach(s=>$(s).value=-1); $('#f-y0').value=2015; $('#f-y1').value=2026; [0,1,2,3].forEach(i=>$('#m-'+i).checked=true); sbOptions(); refresh(); map.fitBounds(START)};
+const pickSb=tr=>{ if(!tr) return; const sb=+tr.dataset.sb; S.sb=S.sb==sb?-1:sb; S.b=-1; $('#f-basin').value=-1; sbOptions(); $('#f-sb').value=S.sb; refresh(true); };
+$('#sbtable tbody').addEventListener('click',e=>pickSb(e.target.closest('tr')));
+$('#sbtable tbody').addEventListener('keydown',e=>{ if(e.key=='Enter') pickSb(e.target.closest('tr')); });
+let lastZ=null; map.on('zoomend',()=>{const z=map.getZoom(), k=z<7?0:z<10?1:2; if(k!==lastZ){lastZ=k; drawMines();}});
+map.on('moveend',drawImgs);
+const START=[[14.2,97.2],[23.2,107.8]]; map.fitBounds(START); sbOptions(); refresh(); drawImgs();
+
+/* ---- model page ---- */
+(function(){ const M=APP.model, T=APP.totals, v1=M.v1, v2=M.v2, b=M.v2b, on=M.onset;
+ const row=(a)=>'<tr>'+a.map((c,i)=>i?`<td class="num">${c}</td>`:`<td>${c}</td>`).join('')+'</tr>';
+ const tab=(h,rows)=>`<div class="tablewrap"><table><thead><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map(row).join('')}</tbody></table></div>`;
+ const R=b.random_only['rndFPR0.005'], H=b.with_hard['rndFPR0.005'], R1=b.random_only['rndFPR0.01'], H1=b.with_hard['rndFPR0.01'];
+ const wcn={'Bare/sparse':'ดินโล่ง','Built-up':'สิ่งปลูกสร้าง','Cropland':'พื้นที่เพาะปลูก','Water':'น้ำ','Grassland':'ทุ่งหญ้า','Shrubland':'ไม้พุ่ม'};
+ const cm=v2.type.cm, lab=v2.type.labels, tp=b.type_pilot;
+ $('#doc').innerHTML=`
+ <section><h3>หน้านี้แสดงอะไร</h3>
+ <p>จุดสีคือเหมืองที่ Stimson Center แปลจากภาพ Planet Labs ${fmt(APP.mines.length)} จุด ทั่ว mainland Southeast Asia ขอบเขตสีคือพื้นที่ที่ model ทำนายว่าเป็นเหมืองจาก AlphaEarth Foundations embedding 10 ม. รายปี รันเฉพาะ ${APP.blocks.length} block ขนาด 10 กม. ในลุ่มน้ำโขงที่มีจุด Stimson รวมประมาณ ${fmt(T.km2)} ตร.กม.</p>
+ <p>ผลปี ${Y1}: ${fmt(T.patches)} patch รวม ${fmt(T.ha)} เฮกตาร์ แบ่งเป็นตรงกับจุด Stimson ${fmt(T.by_status[0][1])} เฮกตาร์ ไม่มีจุด Stimson และเคยเป็นพืชพรรณ ${fmt(T.by_status[1][1])} เฮกตาร์ ไม่มีจุด Stimson บนดินโล่ง ไร่ ชุมชน หรือน้ำ ${fmt((T.by_status[2]||[0,0])[1])} เฮกตาร์ และไม่มีจุด Stimson ที่เห็นเฉพาะปี 2025 อีก ${fmt((T.by_status[3]||[0,0])[1])} เฮกตาร์ สามกลุ่มหลังยังไม่ได้ตรวจ จึงรวมทั้งเหมืองที่ Stimson ไม่ได้ลงจุด ส่วนขยายของเหมืองเดิม ตะกอนในลำน้ำ และ false alarm</p>
+ <p>จุด Stimson ที่เปิดถึงปี ${Y1} ในพื้นที่ที่รัน ${T.mines_open_det} จาก ${T.mines_open} จุด มีขอบเขตทำนายภายใน 100 ม. ตัวเลขนี้เป็น in-sample เพราะจุดเหล่านี้ใช้ train model ด้วย ความแม่นที่วัดแบบกันพื้นที่อยู่ในตารางถัดไป</p></section>
+
+ <section><h3>ความแม่นของการตรวจจับ วัดด้วย spatial cross-validation</h3>
+ <p>แบ่ง 5 fold ตามกริด 0.5° เพื่อไม่ให้จุดใกล้กันอยู่ทั้งฝั่ง train และ test เทียบกับจุดสุ่มในภูมิประเทศซึ่งส่วนใหญ่เป็นป่า ใช้เหมืองในลุ่มน้ำโขงที่เปิดถึงปี 2024</p>
+ ${tab(['','AlphaEarth','TESSERA'],[
+  ['AUC',v1['AEF-RF'].auc.toFixed(2),v1['TESSERA-RF'].auc.toFixed(2)],
+  ['Recall ที่ false alarm 1%',pct(v1['AEF-RF'].recall_fpr1),pct(v1['TESSERA-RF'].recall_fpr1)],
+  ['Recall: heap leach',pct(v1['AEF-RF'].by_method['Heap Leach']),pct(v1['TESSERA-RF'].by_method['Heap Leach'])],
+  ['Recall: in-situ leaching',pct(v1['AEF-RF'].by_method['In-situ Leaching']),pct(v1['TESSERA-RF'].by_method['In-situ Leaching'])],
+  ['Recall: alluvial',pct(v1['AEF-RF'].by_method['Alluvial Mining']),pct(v1['TESSERA-RF'].by_method['Alluvial Mining'])],
+  ['ปีที่เริ่มตรงกับ Stimson ภายใน ±1 ปี',pct(on.AEF.unsup_within1),pct(on.TESSERA.unsup_within1)]])}
+ <p class="note">Random Forest, n = ${v1['AEF-RF']?716:''} เหมือง กับ 8,296 จุดสุ่ม AlphaEarth ใช้ค่าเฉลี่ย 3×3 pixel ส่วน TESSERA ใช้ pixel เดียว การเทียบจึงไม่เท่ากันสนิท</p></section>
+
+ <section><h3>False alarm บนสิ่งปกคลุมดินที่คล้ายเหมือง</h3>
+ <p>เพิ่มจุดเปรียบเทียบจาก ESA WorldCover 2021 (ดินโล่ง สิ่งปลูกสร้าง ไร่ น้ำ ทุ่งหญ้า) ${fmt(v2.n.neg_hard)} จุด และเหมือง rare earth นอกลุ่มน้ำโขงเข้า training ตารางนี้ตั้ง threshold ให้ false alarm บนจุดสุ่มเท่ากับ 0.5% แล้วดูว่า model ทายผิดบนสิ่งปกคลุมดินแต่ละแบบเท่าไร</p>
+ ${tab(['สัดส่วนที่ทายว่าเป็นเหมือง','train ด้วยจุดสุ่มอย่างเดียว','เพิ่ม hard negative'],
+   Object.keys(wcn).map(k=>[wcn[k],pct(R.hardneg_fp[k]),pct(H.hardneg_fp[k])]).concat([['Recall ของเหมืองจริง',pct(R.recall),pct(H.recall)]]))}
+ <p>Model ที่ใช้ทำแผนที่คือแบบเพิ่ม hard negative (MLP, threshold ${APP.thr}) การทายผิดบนดินโล่งลดลงราวครึ่งหนึ่งแต่ยังเหลือ ${pct(H.hardneg_fp['Bare/sparse'])} แลกกับ recall ที่ลดจาก ${pct(R.recall)} เป็น ${pct(H.recall)} จุด "ดินโล่ง" ของ WorldCover บางส่วนอาจเป็นเหมืองที่ Stimson ไม่ได้ลงจุด ตัวเลขนี้จึงเป็นขอบบนของ false alarm</p></section>
+
+ <section><h3>การแยกประเภทเหมือง</h3>
+ ${tab(['จริง \\ ทำนาย'].concat(lab),lab.map((l,i)=>[l].concat(cm[i])))}
+ <p>Accuracy ${pct(v2.type.acc)} แต่เหมือง in-situ leaching ส่วนใหญ่มาจากลุ่มอิรวดี ขณะที่อีกสองประเภทมาจากลุ่มน้ำโขง model จึงอาจเรียนความต่างของภูมิภาคแทนประเภทเหมือง เมื่อดูเฉพาะลุ่มน้ำโขง in-situ leaching ทายถูก ${tp['In-situ Leaching'][0]} จาก ${tp['In-situ Leaching'][1]} จุด</p></section>
+
+ <section><h3>พื้นที่รายปียังใช้ไม่ได้</h3>
+ <p>Model นี้ train จาก embedding ปี 2025 ปีเดียว เมื่อนำไปทำนายปี ${Y0}–2024 ผลแกว่งมากจนอ่านเป็นการขยายตัวของเหมืองไม่ได้ จึงไม่แสดงกราฟรายปีในหน้าแผนที่</p>
+ ${tab(['ปี'].concat(YRS),[['พื้นที่ที่ทำนาย (เฮกตาร์, เฉพาะ pixel ที่เห็นซ้ำปีติดกัน)'].concat(YRS.map(y=>fmt(M.ts.persistent[y]))),['เฉพาะในขอบเขตปี 2025 ที่ตรงกับจุด Stimson'].concat(YRS.map(y=>fmt(M.ts.matched[y]))),['False alarm ที่จุดสุ่ม'].concat(YRS.map(y=>(100*M.ts.negflag[y]).toFixed(1)+'%'))])}
+ <p>False alarm ที่จุดสุ่มต่างกันได้ถึงสามเท่าระหว่างปี และพื้นที่ในขอบเขตเหมืองที่รู้แล้วกระโดดจากปี 2024 มาปี 2025 เกือบเท่าตัว ซึ่งมาจาก model จำปี 2025 ได้ดีกว่าปีอื่น ไม่ใช่เหมืองขยายจริง ปีแรกที่ model เห็นของแต่ละ patch ตรงกับปีของ Stimson ภายใน ±1 ปีเพียง ${pct(M.ts.fy_within1)} ต่ำกว่าวิธีดูปีที่ embedding เปลี่ยนมากที่สุดที่จุดเหมือง (${pct(on.AEF.unsup_within1)})</p>
+ <p>ทางแก้คือ train ข้ามปี โดยใช้จุดเหมืองก่อนปีที่เปิดเป็นตัวอย่างที่ไม่ใช่เหมือง แล้วรันใหม่ทุกปี</p></section>
+
+ <section><h3>ข้อจำกัด</h3><ul>
+ <li>จุด Stimson ไม่ผ่านการ ground-truth และเป็นจุด ไม่ใช่ขอบเขต ปีที่เริ่มเป็นปีที่ผู้แปลภาพเห็นครั้งแรก</li>
+ <li>ขอบเขตที่ทำนายยังไม่ได้ตรวจกับภาพความละเอียดสูงหรือภาคสนาม ใช้เป็นรายการพื้นที่ที่ควรตรวจ ไม่ใช่ข้อสรุปว่าเป็นเหมือง</li>
+ <li>พื้นที่ที่ทำนายรวม false alarm และตะกอนในลำน้ำท้ายเหมือง ค่าเฮกตาร์จึงเป็นขอบบน</li>
+ <li>รันเฉพาะ block ที่มีจุด Stimson ยังไม่ได้ทดสอบบนพื้นที่ที่ไม่มีเหมืองเลย ซึ่งเป็นเงื่อนไขจริงเมื่อขยายทั้งลุ่มน้ำ</li>
+ <li>Embedding เป็นรายปี และ patch เล็กกว่า 0.5 เฮกตาร์ถูกตัดออก</li>
+ <li>สิ่งปกคลุมดินที่ใช้จัดสถานะมาจากปี 2021 เหมืองที่เปิดก่อนปีนั้นและไม่มีจุด Stimson จะถูกจัดเป็นดินโล่ง</li></ul></section>
+
+ <section><h3>ข้อมูลและวิธี</h3><ul>
+ <li>จุดเหมือง แม่น้ำ: <a href="https://www.stimson.org/2025/mining-in-mainland-southeast-asia-river-basins-dashboard/">Stimson Center, Mining in Mainland Southeast Asia River Basins Dashboard</a> (ภาพ Planet Labs, แม่น้ำ HydroSHEDS)</li>
+ <li>Embedding: The AlphaEarth Foundations Satellite Embedding dataset is produced by Google and Google DeepMind (CC-BY 4.0) อ่านจาก Source Cooperative; TESSERA v1.1 (University of Cambridge, CC-BY-SA) ใช้เทียบความแม่น</li>
+ <li>สิ่งปกคลุมดิน: ESA WorldCover 10 m 2021 v200 (CC-BY 4.0)</li>
+ <li>ภาพ: Copernicus Sentinel-2 L2A ปี 2025 จาก Earth Search</li>
+ <li>ขอบเขตประเทศ: Natural Earth; แผนที่ฐาน: OpenStreetMap contributors และ Esri World Imagery</li>
+ <li>ขั้นตอน: sample embedding ที่จุดเหมืองและจุดเปรียบเทียบ → train MLP → ทำนายทุก pixel → threshold ${APP.thr} → เก็บ patch ปี 2025 ตั้งแต่ 0.5 เฮกตาร์ → จับคู่กับจุด Stimson ในระยะ 500 ม.</li></ul></section>`;
+})();
+
+/* ---- routing ---- */
+function route(){ const h=location.hash=='#model'?'model':'map'; $('#view-map').hidden=h!='map'; $('#view-model').hidden=h!='model';
+  $('#tab-map').setAttribute('aria-current',h=='map'?'page':'false'); $('#tab-model').setAttribute('aria-current',h=='model'?'page':'false'); if(h=='map') setTimeout(()=>map.invalidateSize(),0); }
+addEventListener('hashchange',route); route();
+})();
+</script>
+</body>
+</html>

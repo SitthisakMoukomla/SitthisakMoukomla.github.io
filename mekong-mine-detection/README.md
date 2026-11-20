@@ -17,7 +17,7 @@ Then open http://localhost:8000. Opening `index.html` directly from disk does no
 ## Contents
 
 - `index.html` - the app
-- `data/app.json` - Stimson mine points, rivers, boundaries, model metrics
+- `data/app.json` - rivers, boundaries, model metrics
 - `data/patches.json` - predicted mine footprints, 2025 (GeoJSON)
 - `img/` - Sentinel-2 quicklooks, Jan-Mar 2025, one per 10 km block
 - `vendor/` - Leaflet 1.9.4, Chart.js 4.4.1
@@ -27,4 +27,4 @@ Basemap tiles (OpenStreetMap, Esri World Imagery) and fonts (Google Fonts) load 
 
 ## Data credits
 
-Mines and rivers: Stimson Center. Embeddings: The AlphaEarth Foundations Satellite Embedding dataset is produced by Google and Google DeepMind. Land cover: ESA WorldCover 2021. Imagery: Copernicus Sentinel-2. Boundaries: Natural Earth.
+Training reference labels and rivers: Stimson Center. Embeddings: The AlphaEarth Foundations Satellite Embedding dataset is produced by Google and Google DeepMind. Land cover: ESA WorldCover 2021. Imagery: Copernicus Sentinel-2. Boundaries: Natural Earth.

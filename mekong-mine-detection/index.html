@@ -95,7 +95,7 @@ td.num{font-family:var(--mono);font-size:12px}
 <header>
   <img class="logo" src="assets/tu-emblem.png" alt="ตรามหาวิทยาลัยธรรมศาสตร์" width="44" height="44">
   <div class="brand"><h1>Mekong Mine Detection Pilot</h1><span>ผศ.ดร.สิทธิศักดิ์ หมูคำหล้า · ภาควิชาภูมิศาสตร์ คณะศิลปศาสตร์ มหาวิทยาลัยธรรมศาสตร์</span></div>
-  <p>ขอบเขตเหมืองริมน้ำในลุ่มน้ำโขงที่ model ทำนายจาก AlphaEarth embedding ปี 2025 ผลทำนายยังไม่ผ่านการตรวจภาคสนาม</p>
+  <p>ขอบเขตเหมืองริมน้ำในลุ่มน้ำโขงที่ model ทำนายจาก AlphaEarth และ TESSERA embedding ปี 2025 ผลทำนายยังไม่ผ่านการตรวจภาคสนาม</p>
   <nav aria-label="หน้า">
     <a href="#map" id="tab-map">แผนที่</a>
     <a href="#model" id="tab-model">Model และข้อจำกัด</a>
@@ -105,7 +105,9 @@ td.num{font-family:var(--mono);font-size:12px}
 <div id="view-map">
   <aside class="rail left" aria-label="ตัวกรอง">
     <div class="field">
-      <h2>ตัวกรอง</h2>
+      <h2>Foundation model</h2>
+      <div><label for="f-model" style="position:absolute;left:-9999px">Foundation model</label><select id="f-model"><option value="aef">AlphaEarth (Google DeepMind)</option><option value="tess">TESSERA (Cambridge)</option><option value="both">เฉพาะที่ทั้งสองเห็นตรงกัน</option></select></div>
+      <h2 style="margin-top:8px">ตัวกรอง</h2>
       <div><label for="f-country">ประเทศ</label><select id="f-country"></select></div>
       <div><label for="f-sb">ลุ่มน้ำย่อย</label><select id="f-sb"></select></div>
       <div><label for="f-min">ขนาด patch ขั้นต่ำ</label><select id="f-min"><option value="0.5">0.5 เฮกตาร์ขึ้นไป</option><option value="2">2 เฮกตาร์ขึ้นไป</option><option value="5">5 เฮกตาร์ขึ้นไป</option><option value="20">20 เฮกตาร์ขึ้นไป</option></select></div>
@@ -120,7 +122,7 @@ td.num{font-family:var(--mono);font-size:12px}
       <label class="chk"><input type="checkbox" id="l-s0" checked><span class="sw sq" style="background:var(--matched)"></span>ตรงกับเหมืองในข้อมูลอ้างอิง<span class="n" id="n-s0"></span></label>
       <label class="chk"><input type="checkbox" id="l-s1" checked><span class="sw sq" style="background:var(--cand)"></span>ไม่มีในข้อมูลอ้างอิง ปี 2021 ยังเป็นพืชพรรณ<span class="n" id="n-s1"></span></label>
       <label class="chk"><input type="checkbox" id="l-s2" checked><span class="sw sq" style="background:var(--check)"></span>ไม่มีในข้อมูลอ้างอิง ปี 2021 เป็นดินโล่ง ไร่ ชุมชน หรือน้ำ<span class="n" id="n-s2"></span></label>
-      <label class="chk"><input type="checkbox" id="l-s3" checked><span class="sw sq" style="background:var(--newonly)"></span>ไม่มีในข้อมูลอ้างอิง และเห็นเฉพาะปี 2025<span class="n" id="n-s3"></span></label>
+      <label class="chk"><input type="checkbox" id="l-s3" checked><span class="sw sq" style="background:var(--newonly)"></span>ไม่มีในข้อมูลอ้างอิง และเห็นเฉพาะปี 2025 (เฉพาะ AlphaEarth)<span class="n" id="n-s3"></span></label>
     </div>
     <div>
       <h2>แผนที่ฐานและชั้นข้อมูล</h2>
@@ -169,8 +171,8 @@ td.num{font-family:var(--mono);font-size:12px}
 (async function(){
 const $=s=>document.querySelector(s), css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const fmt=n=>Math.round(n).toLocaleString('en-US'), pct=x=>(100*x).toFixed(0)+'%';
-let APP,PATCH;
-try{ [APP,PATCH]=await Promise.all([fetch('data/app.json').then(r=>r.json()),fetch('data/patches.json').then(r=>r.json())]); }
+let APP,PATCH,PATCHT;
+try{ [APP,PATCH,PATCHT]=await Promise.all(['app','patches','patches_tess'].map(f=>fetch('data/'+f+'.json').then(r=>r.json()))); }
 catch(e){ $('#hint').textContent='โหลดข้อมูลไม่สำเร็จ ลองเปิดหน้านี้ใหม่'; return; }
 const YRS=APP.years, Y0=YRS[0], Y1=YRS[YRS.length-1];
 $('#nblk').textContent=APP.blocks.length;
@@ -178,8 +180,8 @@ const MCOL=['--alluvial','--heap','--isl'], MTH=['Alluvial (ร่อนแร�
 const SCOL=['--matched','--cand','--check','--newonly'];
 const SLAB=['ตรงกับข้อมูลอ้างอิง','ไม่มี, เคยเป็นพืชพรรณ','ไม่มี, ดินโล่ง/ไร่/ชุมชน/น้ำ','ไม่มี, เห็นเฉพาะ 2025'];
 const WC={10:'ป่า/ไม้ยืนต้น',20:'ไม้พุ่ม',30:'ทุ่งหญ้า',40:'พื้นที่เพาะปลูก',50:'สิ่งปลูกสร้าง',60:'ดินโล่ง',80:'น้ำ',90:'พื้นที่ชุ่มน้ำ'};
-const S={c:-1,sb:-1,min:.5,m:[true,true,true],s:[true,true,true,true]};
-const PP=PATCH.features.map(f=>f.properties);
+const S={model:'aef',c:-1,sb:-1,min:.5,m:[true,true,true],s:[true,true,true,true]};
+const SRC=()=>S.model=='tess'?PATCHT:PATCH; const PPs={a:PATCH.features.map(f=>f.properties),t:PATCHT.features.map(f=>f.properties)}; const PPc=()=>S.model=='tess'?PPs.t:PPs.a;
 
 /* ---- controls ---- */
 const opt=(el,items,all)=>{el.innerHTML='<option value="-1">'+all+'</option>'+items.map(([v,t])=>`<option value="${v}">${t}</option>`).join('')};
@@ -208,17 +210,18 @@ function setBase(k){ Object.values(BASE).forEach(l=>map.removeLayer(l)); if(BASE
 let patchL=null; const pr=cv('patch'); const imgs=new Map();
 
 const blockOK=i=>{const b=APP.blocks[i]; return (S.c<0||b.c==S.c)&&(S.sb<0||b.sb==S.sb);};
-const baseOK=p=>blockOK(p.bi)&&p.a>=S.min;
+const baseOK=p=>blockOK(p.bi)&&p.a>=S.min&&(S.model!='both'||p.oc>=.2);
 const patchOK=p=>baseOK(p)&&p.t>0&&S.m[p.t-1]&&S.s[p.s];
 function patchPopup(p){const st=['ตรงกับเหมืองในข้อมูลอ้างอิง (ภายใน 500 ม.)','ไม่มีในข้อมูลอ้างอิง และปี 2021 ส่วนใหญ่ยังเป็นพืชพรรณ','ไม่มีในข้อมูลอ้างอิง และปี 2021 เป็นดินโล่ง ไร่ ชุมชน หรือน้ำอยู่แล้ว เสี่ยงทายผิด','ไม่มีในข้อมูลอ้างอิง และ model ไม่เห็นในปี 2024 อาจเป็นพื้นที่เปิดใหม่หรือดินโล่งชั่วคราว'][p.s];
- return `<div class="pp"><b>ขอบเขตที่ model ทำนาย</b> · ${p.a.toLocaleString()} เฮกตาร์<dl>
+ const other=S.model=='tess'?'AlphaEarth':'TESSERA', me=S.model=='tess'?'TESSERA':'AlphaEarth';
+ return `<div class="pp"><b>ขอบเขตที่ ${me} ทำนาย</b> · ${p.a.toLocaleString()} เฮกตาร์<dl>
 <dt>สถานะ</dt><dd>${st}</dd><dt>ประเภทที่ทำนาย</dt><dd>${p.t?APP.meth[p.t-1]:'–'}</dd>
-<dt>ปีแรกที่ model เห็นต่อเนื่องถึง 2025 (หยาบ)</dt><dd>${p.fy?(p.fy==Y0?'≤'+Y0:p.fy):'–'}</dd>
+<dt>${other} เห็นด้วย</dt><dd>${Math.round(100*p.oc)}% ของพื้นที่</dd>${p.fy?`<dt>ปีแรกที่ model เห็นต่อเนื่องถึง 2025 (หยาบ)</dt><dd>${p.fy==Y0?'≤'+Y0:p.fy}</dd>`:''}
 <dt>สิ่งปกคลุมดินปี 2021 (ESA WorldCover)</dt><dd>${WC[p.wc]||'–'}</dd>
 <dt>ค่า probability เฉลี่ย</dt><dd>${p.p}</dd><dt>ลุ่มน้ำย่อย</dt><dd>${APP.blocks[p.bi].sb>=0?APP.subbasins[APP.blocks[p.bi].sb]:'–'}</dd>
 <dt>พิกัด</dt><dd>${p.y}, ${p.x}</dd></dl></div>`;}
 function drawPatches(){ if(patchL) map.removeLayer(patchL); const fill=$('#l-fill').checked;
-  patchL=L.geoJSON(PATCH,{pane:'patch',renderer:pr,filter:f=>patchOK(f.properties),
+  patchL=L.geoJSON(SRC(),{pane:'patch',renderer:pr,filter:f=>patchOK(f.properties),
     style:f=>({color:css(SCOL[f.properties.s]),weight:2,fillColor:css(SCOL[f.properties.s]),fillOpacity:fill?.45:0.03}),
     onEachFeature:(f,l)=>l.bindPopup(()=>patchPopup(f.properties))}).addTo(map); }
 function drawImgs(){ const on=$('#l-img').checked&&map.getZoom()>=10.5, vb=map.getBounds().pad(.1);
@@ -234,11 +237,11 @@ const hbar=(el,labels,cols)=>new Chart($(el),{type:'bar',data:{labels,datasets:[
 const cArea=hbar('#c-area',SLAB,SCOL), cType=hbar('#c-type',['Alluvial','Heap leach','In-situ leaching'],MCOL);
 
 /* ---- summaries ---- */
-function sbStats(){ const m={}; PP.forEach(p=>{ const b=APP.blocks[p.bi]; if(b.sb<0||p.a<S.min||!p.t||!S.m[p.t-1]||!S.s[p.s]||(S.c>=0&&b.c!=S.c)) return; const r=(m[b.sb]=m[b.sb]||{sb:b.sb,n:0,a:0,ma:0,un:0}); r.n++; r.a+=p.a; if(p.s>0) r.un+=p.a; else r.ma+=p.a; });
+function sbStats(){ const m={}; PPc().forEach(p=>{ const b=APP.blocks[p.bi]; if(b.sb<0||p.a<S.min||(S.model=='both'&&p.oc<.2)||!p.t||!S.m[p.t-1]||!S.s[p.s]||(S.c>=0&&b.c!=S.c)) return; const r=(m[b.sb]=m[b.sb]||{sb:b.sb,n:0,a:0,ma:0,un:0}); r.n++; r.a+=p.a; if(p.s>0) r.un+=p.a; else r.ma+=p.a; });
   return Object.values(m).sort((a,b)=>b.a-a.a); }
 function drawTable(){ $('#sbtable tbody').innerHTML=sbStats().map(s=>`<tr tabindex="0" data-sb="${s.sb}" class="${s.sb==S.sb?'on':''}"><td>${APP.subbasins[s.sb]}</td><td class="num">${fmt(s.n)}</td><td class="num">${fmt(s.a)}</td><td class="num">${fmt(s.ma)}</td><td class="num">${fmt(s.un)}</td></tr>`).join(''); }
 function summarize(){
-  const all=PP.filter(baseOK), ps=all.filter(patchOK); const hs=[0,0,0,0], ht=[0,0,0], ns=[0,0,0,0], nt=[0,0,0]; let ha=0;
+  const all=PPc().filter(baseOK), ps=all.filter(patchOK); const hs=[0,0,0,0], ht=[0,0,0], ns=[0,0,0,0], nt=[0,0,0]; let ha=0;
   all.forEach(p=>{ if(p.t&&S.m[p.t-1]) ns[p.s]++; if(p.t&&S.s[p.s]) nt[p.t-1]++; });
   ps.forEach(p=>{ ha+=p.a; hs[p.s]+=p.a; ht[p.t-1]+=p.a; });
   $('#k-n').textContent=fmt(ps.length); $('#k-ha').textContent=fmt(ha); $('#k-ref').textContent=fmt(hs[0]); $('#k-un').textContent=fmt(ha-hs[0]);
@@ -249,6 +252,7 @@ function refresh(fit){ drawPatches(); summarize();
   if(fit){ const bs=APP.blocks.filter((b,i)=>blockOK(i)); if(bs.length) map.fitBounds(L.latLngBounds(bs.flatMap(b=>[[b.bounds[1],b.bounds[0]],[b.bounds[3],b.bounds[2]]])).pad(.05)); } }
 
 /* ---- events ---- */
+$('#f-model').onchange=e=>{S.model=e.target.value; refresh()};
 $('#f-country').onchange=e=>{S.c=+e.target.value; sbOptions(); refresh(true)};
 $('#f-sb').onchange=e=>{S.sb=+e.target.value; refresh(true)};
 $('#f-min').onchange=e=>{S.min=+e.target.value; refresh()};
@@ -258,7 +262,7 @@ $('#f-base').onchange=e=>setBase(e.target.value); setBase('sat');
 $('#l-fill').onchange=drawPatches; $('#l-img').onchange=drawImgs;
 $('#l-blocks').onchange=e=>e.target.checked?blkL.addTo(map):map.removeLayer(blkL);
 const START=L.latLngBounds(APP.blocks.flatMap(b=>[[b.bounds[1],b.bounds[0]],[b.bounds[3],b.bounds[2]]])).pad(.05);
-$('#reset').onclick=()=>{Object.assign(S,{c:-1,sb:-1,min:.5,m:[true,true,true],s:[true,true,true,true]}); $('#f-country').value=-1; $('#f-min').value='0.5'; [0,1,2].forEach(i=>$('#m-'+i).checked=true); [0,1,2,3].forEach(i=>$('#l-s'+i).checked=true); sbOptions(); refresh(); map.fitBounds(START)};
+$('#reset').onclick=()=>{Object.assign(S,{model:S.model,c:-1,sb:-1,min:.5,m:[true,true,true],s:[true,true,true,true]}); $('#f-country').value=-1; $('#f-min').value='0.5'; [0,1,2].forEach(i=>$('#m-'+i).checked=true); [0,1,2,3].forEach(i=>$('#l-s'+i).checked=true); sbOptions(); refresh(); map.fitBounds(START)};
 const pickSb=tr=>{ if(!tr) return; const sb=+tr.dataset.sb; S.sb=S.sb==sb?-1:sb; sbOptions(); $('#f-sb').value=S.sb; refresh(true); if(S.sb<0) map.fitBounds(START); };
 $('#sbtable tbody').addEventListener('click',e=>pickSb(e.target.closest('tr')));
 $('#sbtable tbody').addEventListener('keydown',e=>{ if(e.key=='Enter') pickSb(e.target.closest('tr')); });
@@ -267,6 +271,7 @@ map.fitBounds(START); sbOptions(); refresh(); drawImgs();
 
 /* ---- model page ---- */
 (function(){ const M=APP.model, T=APP.totals, v1=M.v1, v2=M.v2, b=M.v2b, on=M.onset;
+ const C=M.cmp, K=M.cmpmap, CA=C.AEF['fpr0.005'], CT=C.TESSERA['fpr0.005'], CC=C.CONCAT['fpr0.005'], CB=C.BOTH_AGREE;
  const row=(a)=>'<tr>'+a.map((c,i)=>i?`<td class="num">${c}</td>`:`<td>${c}</td>`).join('')+'</tr>';
  const tab=(h,rows)=>`<div class="tablewrap"><table><thead><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map(row).join('')}</tbody></table></div>`;
  const R=b.random_only['rndFPR0.005'], H=b.with_hard['rndFPR0.005'], R1=b.random_only['rndFPR0.01'], H1=b.with_hard['rndFPR0.01'];
@@ -299,6 +304,19 @@ map.fitBounds(START); sbOptions(); refresh(); drawImgs();
  ${tab(['จริง \\ ทำนาย'].concat(lab),lab.map((l,i)=>[l].concat(cm[i])))}
  <p>Accuracy ${pct(v2.type.acc)} แต่เหมือง in-situ leaching ส่วนใหญ่มาจากลุ่มอิรวดี ขณะที่อีกสองประเภทมาจากลุ่มน้ำโขง model จึงอาจเรียนความต่างของภูมิภาคแทนประเภทเหมือง เมื่อดูเฉพาะลุ่มน้ำโขง in-situ leaching ทายถูก ${tp['In-situ Leaching'][0]} จาก ${tp['In-situ Leaching'][1]} จุด</p></section>
 
+ <section><h3>AlphaEarth เทียบกับ TESSERA</h3>
+ <p>เทียบบนจุดชุดเดียวกัน ${fmt(C.n.n)} จุด (เหมือง ${fmt(C.n.pos)} จุดสุ่ม ${fmt(C.n.random)} hard negative ${fmt(C.n.hard)}) ใช้ pixel เดียวที่ตำแหน่งเดียวกัน MLP แบบเดียวกัน และ fold เดียวกัน ตั้ง threshold ให้ false alarm บนจุดสุ่มเท่ากับ 0.5%</p>
+ ${tab(['','AlphaEarth','TESSERA','ใช้สอง embedding ร่วมกัน','นับเฉพาะที่ทั้งสองเห็นตรงกัน'],[
+  ['Recall ของเหมือง',pct(CA.recall),pct(CT.recall),pct(CC.recall),pct(CB.recall)],
+  ['Recall: alluvial',pct(CA.by_method['Alluvial Mining']),pct(CT.by_method['Alluvial Mining']),pct(CC.by_method['Alluvial Mining']),pct(CB.by_method['Alluvial Mining'])],
+  ['Recall: heap leach',pct(CA.by_method['Heap Leach']),pct(CT.by_method['Heap Leach']),pct(CC.by_method['Heap Leach']),pct(CB.by_method['Heap Leach'])],
+  ['Recall: in-situ leaching',pct(CA.by_method['In-situ Leaching']),pct(CT.by_method['In-situ Leaching']),pct(CC.by_method['In-situ Leaching']),pct(CB.by_method['In-situ Leaching'])],
+  ['ทายผิดบนดินโล่ง',pct(CA.hard_fp['Bare/sparse']),pct(CT.hard_fp['Bare/sparse']),pct(CC.hard_fp['Bare/sparse']),pct(CB.hard_fp['Bare/sparse'])],
+  ['ทายผิดบนสิ่งปลูกสร้าง',pct(CA.hard_fp['Built-up']),pct(CT.hard_fp['Built-up']),pct(CC.hard_fp['Built-up']),pct(CB.hard_fp['Built-up'])],
+  ['ทายผิดบนน้ำ',pct(CA.hard_fp['Water']),pct(CT.hard_fp['Water']),pct(CC.hard_fp['Water']),pct(CB.hard_fp['Water'])]])}
+ <p>AlphaEarth จับเหมือง alluvial ได้ดีกว่าชัดเจน ส่วน TESSERA ทายผิดบนสิ่งปลูกสร้างน้อยกว่า ผลรวมของสองตัวใกล้กัน และตัวเลขขยับได้ราว 5 จุดร้อยละระหว่างการรันแต่ละครั้ง การใช้สอง embedding ร่วมกันให้ recall สูงสุด ส่วนการนับเฉพาะที่ทั้งสองเห็นตรงกันลด false alarm ลงมากแต่เสีย recall</p>
+ <p>บนแผนที่ ${APP.blocks.length} block: AlphaEarth ทำนาย ${fmt(K.pix.aef_ha)} เฮกตาร์ TESSERA ${fmt(K.pix.tess_ha)} เฮกตาร์ ซ้อนกัน ${fmt(K.pix.both_ha)} เฮกตาร์ (IoU ${K.pix.iou.toFixed(2)}) ขอบเขตของ AlphaEarth ที่ตรงกับข้อมูลอ้างอิง TESSERA เห็นด้วย ${pct(K.aef.by_status[0].ha_agree/K.aef.by_status[0].ha)} ของพื้นที่ ส่วนที่ไม่มีในข้อมูลอ้างอิง TESSERA เห็นด้วยเพียง ${pct(([1,2,3].reduce((a,k)=>a+K.aef.by_status[k].ha_agree,0))/([1,2,3].reduce((a,k)=>a+K.aef.by_status[k].ha,0)))} การที่สอง model เห็นตรงกันจึงใช้คัดพื้นที่ที่ควรตรวจก่อนได้ จุดอ้างอิงที่มีขอบเขตทำนายภายใน 100 ม.: AlphaEarth ${K.ref.aef} TESSERA ${K.ref.tess} และทั้งสอง ${K.ref.both} จาก ${K.ref.n} จุด (in-sample)</p></section>
+
  <section><h3>พื้นที่รายปียังใช้ไม่ได้</h3>
  <p>Model นี้ train จาก embedding ปี 2025 ปีเดียว เมื่อนำไปทำนายปี ${Y0}–2024 ผลแกว่งมากจนอ่านเป็นการขยายตัวของเหมืองไม่ได้ จึงไม่แสดงกราฟรายปีในหน้าแผนที่</p>
  ${tab(['ปี'].concat(YRS),[['พื้นที่ที่ทำนาย (เฮกตาร์, เฉพาะ pixel ที่เห็นซ้ำปีติดกัน)'].concat(YRS.map(y=>fmt(M.ts.persistent[y]))),['เฉพาะในขอบเขตปี 2025 ที่ตรงกับเหมืองในข้อมูลอ้างอิง'].concat(YRS.map(y=>fmt(M.ts.matched[y]))),['False alarm ที่จุดสุ่ม'].concat(YRS.map(y=>(100*M.ts.negflag[y]).toFixed(1)+'%'))])}
@@ -315,7 +333,7 @@ map.fitBounds(START); sbOptions(); refresh(); drawImgs();
 
  <section><h3>ข้อมูลและวิธี</h3><ul>
  <li>ข้อมูลอ้างอิงสำหรับ train และแม่น้ำ: <a href="https://www.stimson.org/2025/mining-in-mainland-southeast-asia-river-basins-dashboard/">Stimson Center, Mining in Mainland Southeast Asia River Basins Dashboard</a> (ภาพ Planet Labs, แม่น้ำ HydroSHEDS)</li>
- <li>Embedding: The AlphaEarth Foundations Satellite Embedding dataset is produced by Google and Google DeepMind (CC-BY 4.0) อ่านจาก Source Cooperative; TESSERA v1.1 (University of Cambridge, CC-BY-SA) ใช้เทียบความแม่น</li>
+ <li>Embedding: The AlphaEarth Foundations Satellite Embedding dataset is produced by Google and Google DeepMind (CC-BY 4.0) อ่านจาก Source Cooperative; TESSERA v1.1 (University of Cambridge) อ่านผ่าน geotessera</li>
  <li>สิ่งปกคลุมดิน: ESA WorldCover 10 m 2021 v200 (CC-BY 4.0)</li>
  <li>ภาพ: Copernicus Sentinel-2 L2A ปี 2025 จาก Earth Search</li>
  <li>ขอบเขตประเทศ: Natural Earth; แผนที่ฐาน: OpenStreetMap contributors และ Esri World Imagery</li>

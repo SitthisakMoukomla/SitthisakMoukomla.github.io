@@ -18,7 +18,8 @@ Then open http://localhost:8000. Opening `index.html` directly from disk does no
 
 - `index.html` - the app
 - `data/app.json` - rivers, boundaries, model metrics
-- `data/patches.json` - predicted mine footprints, 2025 (GeoJSON)
+- `data/patches.json` - mine footprints predicted from AlphaEarth, 2025 (GeoJSON)
+- `data/patches_tess.json` - mine footprints predicted from TESSERA, 2025 (GeoJSON)
 - `img/` - Sentinel-2 quicklooks, Jan-Mar 2025, one per 10 km block
 - `vendor/` - Leaflet 1.9.4, Chart.js 4.4.1
 - `assets/` - Thammasat University emblem
